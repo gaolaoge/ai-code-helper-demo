@@ -1,0 +1,21 @@
+```tsx
+import React, { useState } from 'react';
+
+export const MinimalDemo: React.FC = () => {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+      <div className="text-6xl font-bold mb-8 text-blue-600">{count}</div>
+      <button
+        className="px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors"
+        onClick={() => setCount(count + 1)}
+      >
+        点击计数
+      </button>
+    </div>
+  );
+};
+
+export default MinimalDemo;
+```

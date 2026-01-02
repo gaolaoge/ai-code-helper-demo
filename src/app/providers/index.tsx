@@ -15,6 +15,16 @@ export interface AppContextType extends AppState {
 
   // 聊天输入相关方法
   setChatInput: (chatInput: string) => void;
+
+  // 消息相关方法
+  messages: Array<{ role: "user" | "assistant"; content: string }>;
+  addMessage: (message: {
+    role: "user" | "assistant";
+    content: string;
+  }) => void;
+  clearMessages: () => void;
+  shouldClearServerHistory: boolean;
+  markServerHistoryCleared: () => void;
 }
 
 // 默认状态
@@ -39,6 +49,30 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   // 初始化状态
   const [loading, setLoading] = useState<boolean>(defaultState.loading);
   const [chatInput, setChatInput] = useState<string>(defaultState.chatInput);
+  const [messages, setMessages] = useState<
+    Array<{ role: "user" | "assistant"; content: string }>
+  >([]); // 完整会话记录（用于 UI 展示）
+  const [shouldClearServerHistory, setShouldClearServerHistory] =
+    useState<boolean>(false);
+
+  const addMessage = (message: {
+    role: "user" | "assistant";
+    content: string;
+  }) => {
+    setMessages((prevMessages) => [...prevMessages, message]);
+  };
+
+  const clearMessages = () => {
+    setMessages([]);
+    // 标记需要清空服务端历史（在下次请求时清空）
+    setShouldClearServerHistory(true);
+  };
+
+  // 全局初始化逻辑
+
+  const markServerHistoryCleared = () => {
+    setShouldClearServerHistory(false);
+  };
 
   // 组合上下文值
   const contextValue: AppContextType = {
@@ -46,6 +80,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     chatInput,
     setLoading,
     setChatInput,
+    messages,
+    addMessage,
+    clearMessages,
+    shouldClearServerHistory,
+    markServerHistoryCleared,
   };
 
   return (

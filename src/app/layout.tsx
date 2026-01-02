@@ -31,20 +31,7 @@ export default function RootLayout({
       >
         <AppProvider>
           <div className="flex flex-col h-full">
-            <nav className="bg-gray-800 text-white p-4">
-              <div className="container mx-auto flex space-x-4">
-                <Link href="/" className="hover:bg-gray-700 px-3 py-2 rounded">
-                  首页
-                </Link>
-                <Link
-                  href="/gaoge"
-                  className="hover:bg-gray-700 px-3 py-2 rounded"
-                >
-                  Gaoge
-                </Link>
-              </div>
-            </nav>
-            <main className="flex-grow">{children}</main>
+            <main className="h-full">{children}</main>
           </div>
         </AppProvider>
       </body>
