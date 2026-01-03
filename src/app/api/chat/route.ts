@@ -78,14 +78,39 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: result.error }, { status: 500 });
     }
 
-    // 将助手回复添加到消息队列（用户消息已经在队列中）
+    // 解析 DeepSeek 返回的 JSON 字符串为对象
+    let parsedContent: { code: string; description: string };
+    try {
+      parsedContent = JSON.parse(result.content);
+
+      // 验证解析后的对象结构
+      if (
+        !parsedContent ||
+        typeof parsedContent.code !== "string" ||
+        typeof parsedContent.description !== "string"
+      ) {
+        throw new Error("返回的 JSON 结构不符合预期");
+      }
+    } catch (parseError) {
+      console.error("解析 DeepSeek 返回的 JSON 失败:", parseError);
+      console.error("原始内容:", result.content);
+      return NextResponse.json(
+        {
+          error: "AI 返回的内容格式不正确，无法解析为 JSON 对象",
+        },
+        { status: 500 }
+      );
+    }
+
+    // 将助手回复添加到消息队列（保存原始字符串，因为 API 需要字符串格式）
     deepSeekCore.addAssistantMessage({
       role: "assistant",
       content: result.content,
     });
 
+    // 返回解析后的对象结构
     return NextResponse.json({
-      content: result.content,
+      content: parsedContent,
     });
   } catch (error) {
     console.error("API 路由错误:", error);

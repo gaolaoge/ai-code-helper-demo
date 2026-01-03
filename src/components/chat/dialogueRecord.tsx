@@ -6,7 +6,7 @@ import { useAppContext } from "../../app/providers";
 
 function DialogueRecord() {
   const { messages } = useAppContext();
-  console.log("GG messages: ", messages);
+  console.log("左侧对话记录 messages: ", messages);
 
   return (
     <div className="h-full overflow-auto">
@@ -26,7 +26,9 @@ function DialogueRecord() {
         <div className="space-y-6 py-6 px-4">
           {messages.map((message, index) => {
             const isUser = message.role === "user";
-
+            const realContent = isUser
+              ? message.content
+              : message.content.description;
             return (
               <div
                 key={index}
@@ -71,7 +73,7 @@ function DialogueRecord() {
                     }`}
                   >
                     <div className="whitespace-pre-wrap break-words leading-relaxed text-[15px]">
-                      {message.content}
+                      {realContent}
                     </div>
                   </div>
                 </div>

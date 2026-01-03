@@ -1,11 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
+import { ChatMessageType } from "@/types";
 
 // 应用全局状态类型定义
 export interface AppState {
   loading: boolean;
-  chatInput: string;
 }
 
 // Context类型定义
@@ -13,15 +13,9 @@ export interface AppContextType extends AppState {
   // 加载状态相关方法
   setLoading: (loading: boolean) => void;
 
-  // 聊天输入相关方法
-  setChatInput: (chatInput: string) => void;
-
   // 消息相关方法
-  messages: Array<{ role: "user" | "assistant"; content: string }>;
-  addMessage: (message: {
-    role: "user" | "assistant";
-    content: string;
-  }) => void;
+  messages: Array<ChatMessageType>;
+  addMessage: (message: ChatMessageType) => void;
   clearMessages: () => void;
   shouldClearServerHistory: boolean;
   markServerHistoryCleared: () => void;
@@ -30,7 +24,6 @@ export interface AppContextType extends AppState {
 // 默认状态
 const defaultState: AppState = {
   loading: false,
-  chatInput: "",
 };
 
 // 创建Context
@@ -43,22 +36,16 @@ interface AppProviderProps {
 
 /**
  * 应用全局状态管理Provider
- * 提供加载状态和聊天输入管理功能
+ * 提供加载状态和消息管理功能
  */
 export const AppProvider = ({ children }: AppProviderProps) => {
   // 初始化状态
   const [loading, setLoading] = useState<boolean>(defaultState.loading);
-  const [chatInput, setChatInput] = useState<string>(defaultState.chatInput);
-  const [messages, setMessages] = useState<
-    Array<{ role: "user" | "assistant"; content: string }>
-  >([]); // 完整会话记录（用于 UI 展示）
+  const [messages, setMessages] = useState<Array<ChatMessageType>>([]); // 完整会话记录（用于 UI 展示）
   const [shouldClearServerHistory, setShouldClearServerHistory] =
     useState<boolean>(false);
 
-  const addMessage = (message: {
-    role: "user" | "assistant";
-    content: string;
-  }) => {
+  const addMessage = (message: ChatMessageType) => {
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 
@@ -77,9 +64,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   // 组合上下文值
   const contextValue: AppContextType = {
     loading,
-    chatInput,
     setLoading,
-    setChatInput,
     messages,
     addMessage,
     clearMessages,

@@ -19,7 +19,7 @@ export default function Builder() {
     const lastAssistantMessage = messages
       .filter((msg) => msg.role === "assistant")
       .pop();
-    return lastAssistantMessage?.content || "";
+    return lastAssistantMessage?.content.code || "";
   }, [messages]);
 
   const tabItems = [

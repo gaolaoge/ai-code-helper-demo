@@ -14,7 +14,6 @@ interface ChatInputProps {
 function ChatInput({ placeholder = "请输入内容..." }: ChatInputProps) {
   const {
     messages,
-    setChatInput,
     addMessage,
     shouldClearServerHistory,
     markServerHistoryCleared,
@@ -86,7 +85,6 @@ function ChatInput({ placeholder = "请输入内容..." }: ChatInputProps) {
         content: data.content,
       } as ChatMessageType;
       addMessage(assistantMessage);
-      setChatInput(inputValue);
 
       // 提交成功后清空输入框
       setInputValue("");

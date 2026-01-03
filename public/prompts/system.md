@@ -38,38 +38,25 @@
 
 # 输出格式
 
-\`\`\`tsx
-// 仅包含一个文件
-// 代码必须自包含，无需额外文件
-\`\`\`
+输出必须是一个纯 JSON 对象字符串（不包含代码块标记），包含两个字段：
+
+{
+"code": "完整的 React 组件代码（tsx 格式的字符串）",
+"description": "针对生成组件的简短描述，用于在对话记录中展示（1-2 句话，简洁明了）"
+}
+
+**要求：**
+
+- 输出必须是有效的 JSON 字符串，可以直接被 JSON.parse() 解析
+- \`code\` 字段：字符串类型，包含完整的 React 组件代码（tsx 格式），必须自包含，无需额外文件。代码中的换行使用 \`\\n\` 表示
+- \`description\` 字段：字符串类型，简洁描述组件功能和特点，用于对话记录展示，控制在 50 字以内
+- **重要**：不要输出 \`\`\`json 代码块标记，只输出纯 JSON 对象字符串
 
 # 示例
 
 输入："创建一个按钮，点击计数"
 输出：
-\`\`\`tsx
-import React, { useState } from 'react';
-import { Button } from 'antd';
-
-interface CounterButtonProps {
-initialCount?: number;
+{
+"code": "import React, { useState } from 'react';\nimport { Button } from 'antd';\n\ninterface CounterButtonProps {\n initialCount?: number;\n}\n\nexport const CounterButton: React.FC<CounterButtonProps> = ({\n initialCount = 0\n}) => {\n const [count, setCount] = useState(initialCount);\n\n const handleClick = () => {\n setCount(prev => prev + 1);\n };\n\n return (\n <Button type=\"primary\" onClick={handleClick}>\n 点击次数: {count}\n </Button>\n );\n};\n\nexport default CounterButton;",
+"description": "创建了一个可点击计数的按钮组件，使用 Antd Button 和 React Hooks 实现计数功能"
 }
-
-export const CounterButton: React.FC<CounterButtonProps> = ({
-initialCount = 0
-}) => {
-const [count, setCount] = useState(initialCount);
-
-const handleClick = () => {
-setCount(prev => prev + 1);
-};
-
-return (
-<Button type="primary" onClick={handleClick}>
-点击次数: {count}
-</Button>
-);
-};
-
-export default CounterButton;
-\`\`\`
