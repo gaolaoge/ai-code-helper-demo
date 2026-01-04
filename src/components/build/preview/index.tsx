@@ -3,7 +3,8 @@
 import { EyeOutlined } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import generateHtmlContent from "./template";
-// import mockCode from "./mockCode.txt";
+import mockCode from "@/mock/mockCode.txt";
+import { MOCK_CODE_KEY } from "@/constants/app";
 
 // 预览组件属性类型定义
 interface PreviewProps {
@@ -15,7 +16,15 @@ interface PreviewProps {
  * 使用 iframe 沙箱环境渲染 JSX 代码
  */
 function Preview({ children }: PreviewProps) {
-  // children = mockCode;
+  const [useMockCode, setUseMockCode] = useState(false);
+
+  useEffect(() => {
+    const mockEnabled = localStorage.getItem(MOCK_CODE_KEY) === "true";
+    setUseMockCode(mockEnabled);
+  }, []);
+
+  children = useMockCode ? mockCode : children;
+
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

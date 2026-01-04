@@ -1,0 +1,1 @@
+export const MOCK_CODE_KEY = "IS_MOCK_GENERATOR_CODE";

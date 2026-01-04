@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AppProvider from "./providers";
+import TriggerMock from "@/components/triggerMock";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +32,7 @@ export default function RootLayout({
         <AppProvider>
           <div className="flex flex-col h-full">
             <main className="h-full">{children}</main>
+            <TriggerMock />
           </div>
         </AppProvider>
       </body>
